@@ -37,6 +37,7 @@
 	<modules>
 		<module>eureka-server</module>
 		<module>api-persona</module>
+		<module>api-documento</module>
 	</modules>
 
 </project>
