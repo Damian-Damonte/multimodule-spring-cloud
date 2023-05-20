@@ -20,11 +20,13 @@ public class PersonaController {
 
     @GetMapping
     public List<Persona> getAllPersonas() {
+        System.out.println("---- peticion recibida ----");
         return personas;
     }
 
     @GetMapping("/{id}")
     public Persona getPersonaById(@PathVariable Long id) {
+        System.out.println("---- peticion recibida ----");
         return personas.stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst()

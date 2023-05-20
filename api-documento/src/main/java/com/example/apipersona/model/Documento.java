@@ -7,6 +7,6 @@ import lombok.Data;
 @Builder
 public class Documento {
     private Long id;
-    private Integer numero;
+    private Long numero;
     private Persona persona;
 }

@@ -1,5 +1,7 @@
 package com.example.apipersona.controller;
 
+import com.example.apipersona.client.PersonaClient;
+import com.example.apipersona.model.Documento;
 import com.example.apipersona.model.Persona;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,23 +13,29 @@ import java.util.List;
 @RestController
 @RequestMapping("/documentos")
 public class PersonaController {
+    private final PersonaClient personaClient;
 
-    private final List<Persona> personas = List.of(
-            Persona.builder().id(1L).nombre("Juan").edad(34).build(),
-                Persona.builder().id(2L).nombre("Carlos").edad(57).build(),
-                Persona.builder().id(3L).nombre("Martin").edad(26).build()
-        );
+    public PersonaController(PersonaClient personaClient) {
+        this.personaClient = personaClient;
+    }
 
     @GetMapping
-    public List<Persona> getAllDocumentos() {
-        return personas;
+    public List<Documento> getAllDocumentos() {
+        return personaClient.getAllPersonas().stream().map(
+                persona -> Documento.builder()
+                        .id(persona.getId())
+                        .numero(Math.round(Math.random() * 1000000))
+                        .persona(persona)
+                        .build()).toList();
     }
 
     @GetMapping("/{id}")
-    public Persona getDocumentoById(@PathVariable Long id) {
-        return personas.stream()
-                .filter(p -> p.getId().equals(id))
-                .findFirst()
-                .orElse(Persona.builder().id(99999L).nombre("Desconocido").edad(0).build());
+    public Documento getDocumentoById(@PathVariable Long id) {
+        Persona persona = personaClient.getPersonaById(id);
+        return Documento.builder()
+                .id(persona.getId())
+                .numero(persona.getNombre().equals("Desconocido") ? 99999 : Math.round(Math.random() * 1000000))
+                .persona(persona)
+                .build();
     }
 }
